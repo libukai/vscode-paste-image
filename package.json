@@ -1,8 +1,8 @@
 {
   "name": "vscode-paste-image",
   "displayName": "Paste Image",
-  "description": "paste image from clipboard directly",
-  "version": "1.0.4",
+  "description": "Paste image from clipboard directly with modern TypeScript implementation",
+  "version": "2.0.0",
   "publisher": "mushan",
   "author": {
     "name": "mushan",
@@ -26,18 +26,17 @@
     "image",
     "markdown",
     "paste image",
-    "keybindings"
+    "keybindings",
+    "clipboard",
+    "asciidoc"
   ],
   "engines": {
-    "vscode": "^1.0.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:extension.pasteImage"
-  ],
-  "main": "./out/src/extension",
+  "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
@@ -46,42 +45,45 @@
         "pasteImage.path": {
           "type": "string",
           "default": "${currentFileDir}",
-          "description": "The destination to save image file.You can use variable ${currentFileDir} and ${projectRoot}. ${currentFileDir} will be replace by the path of directory that contain current editing file. ${projectRoot} will be replace by path of the project opened in vscode."
+          "description": "The destination to save image file. You can use variables ${currentFileDir} and ${workspaceRoot}.",
+          "markdownDescription": "The destination to save image file. You can use variables:\n- `${currentFileDir}`: Current file's directory\n- `${workspaceRoot}`: Workspace root directory"
         },
         "pasteImage.basePath": {
           "type": "string",
           "default": "${currentFileDir}",
-          "description": "The base path of image url.You can use variable ${currentFileDir} and ${projectRoot}. ${currentFileDir} will be replace by the path of directory that contain current editing file. ${projectRoot} will be replace by path of the project opened in vscode. If you set basePath to empty String, it will insert absolute path to file."
+          "description": "The base path for image URL generation. Leave empty for absolute paths.",
+          "markdownDescription": "The base path for image URL generation. You can use variables:\n- `${currentFileDir}`: Current file's directory\n- `${workspaceRoot}`: Workspace root directory\n- Leave empty for absolute paths"
         },
         "pasteImage.forceUnixStyleSeparator": {
           "type": "boolean",
           "default": true,
-          "description": "Force set the file separator styel to unix style. If set false, separator styel will follow the system style."
+          "description": "Force Unix-style path separators (/) regardless of OS"
         },
         "pasteImage.prefix": {
           "type": "string",
           "default": "",
-          "description": "The string prepend to the resolved image path before paste."
+          "description": "String to prepend to the resolved image path"
         },
         "pasteImage.suffix": {
           "type": "string",
           "default": "",
-          "description": "The string append to the resolved image path before paste."
+          "description": "String to append to the resolved image path"
         },
         "pasteImage.defaultName": {
           "type": "string",
-          "default": "Y-MM-DD-HH-mm-ss",
-          "description": "The default image file name. The value of this config will be pass to the 'format' function of moment library(a js time manipulation library), you can read document https://momentjs.com/docs/#/displaying/format/ for advanced usage."
+          "default": "YYYY-MM-DD-HH-mm-ss",
+          "description": "Default image file name pattern using date-fns format tokens",
+          "markdownDescription": "Default image file name pattern. Uses [date-fns format tokens](https://date-fns.org/docs/format):\n- `YYYY`: 4-digit year\n- `MM`: 2-digit month\n- `DD`: 2-digit day\n- `HH`: 24-hour format hour\n- `mm`: minutes\n- `ss`: seconds"
         },
         "pasteImage.namePrefix": {
           "type": "string",
           "default": "",
-          "description": "The string prepend to the image file name."
+          "description": "String to prepend to the image file name"
         },
         "pasteImage.nameSuffix": {
           "type": "string",
           "default": "",
-          "description": "The string append to the image file name."
+          "description": "String to append to the image file name"
         },
         "pasteImage.encodePath": {
           "type": "string",
@@ -91,17 +93,23 @@
             "urlEncodeSpace"
           ],
           "default": "urlEncodeSpace",
-          "description": "The string append to the image file name.How to encode image path before insert to editor. Support options: none, urlEncode, urlEncodeSpace"
+          "description": "How to encode the image path",
+          "enumDescriptions": [
+            "No encoding",
+            "Full URL encoding",
+            "Encode spaces only"
+          ]
         },
         "pasteImage.insertPattern": {
           "type": "string",
           "default": "${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix}",
-          "description": "The pattern of string that would be pasted to text."
+          "description": "Pattern for inserting image references",
+          "markdownDescription": "Pattern for inserting image references. Available variables:\n- `${imageSyntaxPrefix}`: Language-specific prefix (e.g., `![](` for Markdown)\n- `${imageSyntaxSuffix}`: Language-specific suffix (e.g., `)` for Markdown)\n- `${imageFilePath}`: The processed image file path\n- `${imageFileName}`: Image file name only\n- `${imageFileNameWithoutExt}`: Image file name without extension"
         },
         "pasteImage.showFilePathConfirmInputBox": {
           "type": "boolean",
           "default": false,
-          "description": "Set to true if you want to be able to change the file path or name prior to saving the file to disk"
+          "description": "Show input box to confirm/modify file path before saving"
         },
         "pasteImage.filePathConfirmInputBoxMode": {
           "type": "string",
@@ -110,19 +118,46 @@
             "onlyName"
           ],
           "default": "fullPath",
-          "description": "Set the mode of file path confirm inputbox"
+          "description": "What to show in the confirmation input box",
+          "enumDescriptions": [
+            "Show full file path",
+            "Show file name only"
+          ]
+        },
+        "pasteImage.imageFormat": {
+          "type": "string",
+          "enum": [
+            "png",
+            "jpg",
+            "webp"
+          ],
+          "default": "png",
+          "description": "Image format for saved files",
+          "enumDescriptions": [
+            "PNG format (lossless)",
+            "JPEG format (lossy, smaller)",
+            "WebP format (modern, efficient)"
+          ]
+        },
+        "pasteImage.jpegQuality": {
+          "type": "number",
+          "default": 85,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "JPEG quality (1-100, only for JPEG format)"
         }
       }
     },
     "commands": [
       {
-        "command": "extension.pasteImage",
-        "title": "Paste Image"
+        "command": "pasteImage.paste",
+        "title": "Paste Image",
+        "category": "Paste Image"
       }
     ],
     "keybindings": [
       {
-        "command": "extension.pasteImage",
+        "command": "pasteImage.paste",
         "key": "ctrl+alt+v",
         "mac": "cmd+alt+v",
         "when": "editorTextFocus"
@@ -130,18 +165,40 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run build && npm run lint",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "package": "vsce package",
+    "clean": "rimraf out"
   },
   "dependencies": {
-    "copy-paste": "^1.2.0",
-    "fs-extra": "^3.0.1",
-    "moment": "^2.14.1",
-    "upath": "^1.0.0"
+    "clipboardy": "^3.0.0",
+    "date-fns": "^2.29.3",
+    "fs-extra": "^11.1.1"
   },
   "devDependencies": {
-    "typescript": "^1.8.5",
-    "vscode": "^0.11.0"
+    "@types/fs-extra": "^11.0.1",
+    "@types/jest": "^29.5.5",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "@vscode/test-electron": "^2.3.4",
+    "@vscode/vsce": "^2.21.1",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
   }
 }
