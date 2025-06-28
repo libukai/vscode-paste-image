@@ -1,20 +1,20 @@
 {
-  "name": "vscode-paste-image",
-  "displayName": "Paste Image",
-  "description": "Paste image from clipboard directly with modern TypeScript implementation",
+  "name": "vscode-paste-image-modern",
+  "displayName": "Paste Image Modern",
+  "description": "Modern VSCode extension for pasting images from clipboard with TypeScript 5.x and latest VSCode APIs",
   "version": "2.0.0",
-  "publisher": "mushan",
+  "publisher": "Libukai",
   "author": {
-    "name": "mushan",
-    "email": "mushanmail@126.com"
+    "name": "Libukai",
+    "email": "libukai@example.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mushanshitiancai/vscode-paste-image.git"
+    "url": "https://github.com/Libukai/vscode-paste-image-modern.git"
   },
-  "homepage": "https://github.com/mushanshitiancai/vscode-paste-image/blob/master/README.md",
+  "homepage": "https://github.com/Libukai/vscode-paste-image-modern/blob/master/README.md",
   "bugs": {
-    "url": "https://github.com/mushanshitiancai/vscode-paste-image/issues"
+    "url": "https://github.com/Libukai/vscode-paste-image-modern/issues"
   },
   "icon": "res/icon.png",
   "galleryBanner": {
@@ -24,11 +24,17 @@
   "keywords": [
     "paste",
     "image",
-    "markdown",
-    "paste image",
-    "keybindings",
     "clipboard",
-    "asciidoc"
+    "markdown",
+    "asciidoc",
+    "typescript",
+    "modern",
+    "screenshot",
+    "png",
+    "jpg",
+    "webp",
+    "productivity",
+    "editing"
   ],
   "engines": {
     "vscode": "^1.75.0"

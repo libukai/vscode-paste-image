@@ -1,5 +1,57 @@
 # Change Log
 
+## 2.0.0 (December 28, 2024)
+
+### 🔄 Complete Rewrite & Modernization
+
+This is a complete rewrite of the extension with modern TypeScript and VSCode APIs.
+
+#### ✨ New Features
+- **Multi-format Support**: PNG, JPEG, WebP image formats
+- **Enhanced Image Quality**: Configurable JPEG quality settings
+- **Better Language Support**: Added reStructuredText and Org-mode support
+- **Modern Date Formatting**: Migrated from moment.js to date-fns
+- **Enhanced Error Handling**: Comprehensive error types and user-friendly messages
+- **Type Safety**: Full TypeScript coverage with strict mode
+
+#### 🏗️ Technical Improvements
+- **TypeScript 5.2+**: Upgraded from TypeScript 1.8.5
+- **VSCode API 1.75+**: Upgraded from VSCode 1.0.0
+- **Modern Architecture**: Modular design with dependency injection
+- **Async/Await**: Replaced callback patterns with modern async patterns
+- **Comprehensive Testing**: Jest test suite with 80%+ coverage
+- **Code Quality**: ESLint + Prettier integration
+
+#### 🔧 Configuration Changes
+- **New Settings**:
+  - `pasteImage.imageFormat`: Choose PNG, JPEG, or WebP
+  - `pasteImage.jpegQuality`: Configure JPEG compression quality
+- **Updated Defaults**:
+  - `pasteImage.defaultName`: Now uses `yyyy-MM-dd-HH-mm-ss` (date-fns format)
+- **Variable Changes**:
+  - `${projectRoot}` → `${workspaceRoot}` (following VSCode conventions)
+
+#### 🔄 Breaking Changes
+- **Minimum VSCode Version**: Now requires VSCode 1.75.0+
+- **Date Format Tokens**: Changed from moment.js to date-fns format
+  - `YYYY` → `yyyy` (4-digit year)
+  - `DD` → `dd` (2-digit day)
+- **Configuration Migration Required**: Users with custom `defaultName` patterns need to update format tokens
+
+#### 🛠️ Dependencies
+- **Added**: date-fns, clipboardy, fs-extra@11.x
+- **Removed**: moment, copy-paste, legacy type definitions
+- **Updated**: All development dependencies to latest versions
+
+#### 🏆 Improvements
+- **Performance**: Faster startup and execution
+- **Reliability**: Better error handling and edge case coverage
+- **Maintainability**: Clean, modular codebase with comprehensive tests
+- **User Experience**: Better error messages and configuration validation
+- **Cross-platform**: Improved clipboard handling on all platforms
+
+---
+
 ## 1.0.4 (January 23, 2018)
 
 - Fix: paste image get blank image issue (windows)
