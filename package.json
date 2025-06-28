@@ -1,7 +1,9 @@
 {
   "name": "vscode-paste-image-modern",
   "displayName": "Paste Image Modern",
+  "displayName.zh": "现代图片粘贴",
   "description": "Modern VSCode extension for pasting images from clipboard with TypeScript 5.x and latest VSCode APIs",
+  "description.zh": "现代化的VSCode插件，支持从剪贴板粘贴图片，使用TypeScript 5.x和最新的VSCode API",
   "version": "2.0.0",
   "publisher": "Libukai",
   "author": {
@@ -51,45 +53,56 @@
         "pasteImage.path": {
           "type": "string",
           "default": "${currentFileDir}",
-          "description": "The destination to save image file. You can use variables ${currentFileDir} and ${workspaceRoot}.",
-          "markdownDescription": "The destination to save image file. You can use variables:\n- `${currentFileDir}`: Current file's directory\n- `${workspaceRoot}`: Workspace root directory"
+          "description": "图片保存路径。可使用变量 ${currentFileDir} 和 ${workspaceRoot}",
+          "description.zh": "图片保存路径。可使用变量 ${currentFileDir} 和 ${workspaceRoot}",
+          "markdownDescription": "图片保存路径。可使用以下变量：\n- `${currentFileDir}`: 当前文件所在目录\n- `${workspaceRoot}`: 工作区根目录",
+          "markdownDescription.zh": "图片保存路径。可使用以下变量：\n- `${currentFileDir}`: 当前文件所在目录\n- `${workspaceRoot}`: 工作区根目录"
         },
         "pasteImage.basePath": {
           "type": "string",
           "default": "${currentFileDir}",
-          "description": "The base path for image URL generation. Leave empty for absolute paths.",
-          "markdownDescription": "The base path for image URL generation. You can use variables:\n- `${currentFileDir}`: Current file's directory\n- `${workspaceRoot}`: Workspace root directory\n- Leave empty for absolute paths"
+          "description": "生成图片URL的基础路径。留空表示使用绝对路径",
+          "description.zh": "生成图片URL的基础路径。留空表示使用绝对路径",
+          "markdownDescription": "生成图片URL的基础路径。可使用以下变量：\n- `${currentFileDir}`: 当前文件所在目录\n- `${workspaceRoot}`: 工作区根目录\n- 留空表示使用绝对路径",
+          "markdownDescription.zh": "生成图片URL的基础路径。可使用以下变量：\n- `${currentFileDir}`: 当前文件所在目录\n- `${workspaceRoot}`: 工作区根目录\n- 留空表示使用绝对路径"
         },
         "pasteImage.forceUnixStyleSeparator": {
           "type": "boolean",
           "default": true,
-          "description": "Force Unix-style path separators (/) regardless of OS"
+          "description": "强制使用Unix风格的路径分隔符 (/) 无论操作系统",
+          "description.zh": "强制使用Unix风格的路径分隔符 (/) 无论操作系统"
         },
         "pasteImage.prefix": {
           "type": "string",
           "default": "",
-          "description": "String to prepend to the resolved image path"
+          "description": "图片路径前缀字符串",
+          "description.zh": "图片路径前缀字符串"
         },
         "pasteImage.suffix": {
           "type": "string",
           "default": "",
-          "description": "String to append to the resolved image path"
+          "description": "图片路径后缀字符串",
+          "description.zh": "图片路径后缀字符串"
         },
         "pasteImage.defaultName": {
           "type": "string",
           "default": "yyyy-MM-dd-HH-mm-ss",
-          "description": "Default image file name pattern using date-fns format tokens",
-          "markdownDescription": "Default image file name pattern. Uses [date-fns format tokens](https://date-fns.org/docs/format):\n- `yyyy`: 4-digit year\n- `MM`: 2-digit month\n- `dd`: 2-digit day\n- `HH`: 24-hour format hour\n- `mm`: minutes\n- `ss`: seconds"
+          "description": "默认图片文件名模式，使用 date-fns 格式标记",
+          "description.zh": "默认图片文件名模式，使用 date-fns 格式标记",
+          "markdownDescription": "默认图片文件名模式。使用 [date-fns 格式标记](https://date-fns.org/docs/format)：\n- `yyyy`: 4位年份\n- `MM`: 2位月份\n- `dd`: 2位日期\n- `HH`: 24小时制小时\n- `mm`: 分钟\n- `ss`: 秒",
+          "markdownDescription.zh": "默认图片文件名模式。使用 [date-fns 格式标记](https://date-fns.org/docs/format)：\n- `yyyy`: 4位年份\n- `MM`: 2位月份\n- `dd`: 2位日期\n- `HH`: 24小时制小时\n- `mm`: 分钟\n- `ss`: 秒"
         },
         "pasteImage.namePrefix": {
           "type": "string",
           "default": "",
-          "description": "String to prepend to the image file name"
+          "description": "图片文件名前缀",
+          "description.zh": "图片文件名前缀"
         },
         "pasteImage.nameSuffix": {
           "type": "string",
           "default": "",
-          "description": "String to append to the image file name"
+          "description": "图片文件名后缀",
+          "description.zh": "图片文件名后缀"
         },
         "pasteImage.encodePath": {
           "type": "string",
@@ -99,23 +112,32 @@
             "urlEncodeSpace"
           ],
           "default": "urlEncodeSpace",
-          "description": "How to encode the image path",
+          "description": "图片路径编码方式",
+          "description.zh": "图片路径编码方式",
           "enumDescriptions": [
-            "No encoding",
-            "Full URL encoding",
-            "Encode spaces only"
+            "不编码",
+            "完整URL编码",
+            "仅编码空格"
+          ],
+          "enumDescriptions.zh": [
+            "不编码",
+            "完整URL编码",
+            "仅编码空格"
           ]
         },
         "pasteImage.insertPattern": {
           "type": "string",
           "default": "${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix}",
-          "description": "Pattern for inserting image references",
-          "markdownDescription": "Pattern for inserting image references. Available variables:\n- `${imageSyntaxPrefix}`: Language-specific prefix (e.g., `![](` for Markdown)\n- `${imageSyntaxSuffix}`: Language-specific suffix (e.g., `)` for Markdown)\n- `${imageFilePath}`: The processed image file path\n- `${imageFileName}`: Image file name only\n- `${imageFileNameWithoutExt}`: Image file name without extension"
+          "description": "插入图片引用的模式",
+          "description.zh": "插入图片引用的模式",
+          "markdownDescription": "插入图片引用的模式。可用变量：\n- `${imageSyntaxPrefix}`: 语言特定前缀 (如 Markdown 的 `![](` )\n- `${imageSyntaxSuffix}`: 语言特定后缀 (如 Markdown 的 `)` )\n- `${imageFilePath}`: 处理后的图片文件路径\n- `${imageFileName}`: 仅图片文件名\n- `${imageFileNameWithoutExt}`: 不含扩展名的图片文件名",
+          "markdownDescription.zh": "插入图片引用的模式。可用变量：\n- `${imageSyntaxPrefix}`: 语言特定前缀 (如 Markdown 的 `![](` )\n- `${imageSyntaxSuffix}`: 语言特定后缀 (如 Markdown 的 `)` )\n- `${imageFilePath}`: 处理后的图片文件路径\n- `${imageFileName}`: 仅图片文件名\n- `${imageFileNameWithoutExt}`: 不含扩展名的图片文件名"
         },
         "pasteImage.showFilePathConfirmInputBox": {
           "type": "boolean",
           "default": false,
-          "description": "Show input box to confirm/modify file path before saving"
+          "description": "保存前显示输入框确认/修改文件路径",
+          "description.zh": "保存前显示输入框确认/修改文件路径"
         },
         "pasteImage.filePathConfirmInputBoxMode": {
           "type": "string",
@@ -124,10 +146,15 @@
             "onlyName"
           ],
           "default": "fullPath",
-          "description": "What to show in the confirmation input box",
+          "description": "确认输入框中显示的内容",
+          "description.zh": "确认输入框中显示的内容",
           "enumDescriptions": [
-            "Show full file path",
-            "Show file name only"
+            "显示完整文件路径",
+            "仅显示文件名"
+          ],
+          "enumDescriptions.zh": [
+            "显示完整文件路径",
+            "仅显示文件名"
           ]
         },
         "pasteImage.imageFormat": {
@@ -138,11 +165,17 @@
             "webp"
           ],
           "default": "png",
-          "description": "Image format for saved files",
+          "description": "保存的图片格式",
+          "description.zh": "保存的图片格式",
           "enumDescriptions": [
-            "PNG format (lossless)",
-            "JPEG format (lossy, smaller)",
-            "WebP format (modern, efficient)"
+            "PNG 格式（无损）",
+            "JPEG 格式（有损，更小）",
+            "WebP 格式（现代，高效）"
+          ],
+          "enumDescriptions.zh": [
+            "PNG 格式（无损）",
+            "JPEG 格式（有损，更小）",
+            "WebP 格式（现代，高效）"
           ]
         },
         "pasteImage.jpegQuality": {
@@ -150,7 +183,8 @@
           "default": 85,
           "minimum": 1,
           "maximum": 100,
-          "description": "JPEG quality (1-100, only for JPEG format)"
+          "description": "JPEG 质量（1-100，仅对JPEG格式有效）",
+          "description.zh": "JPEG 质量（1-100，仅对JPEG格式有效）"
         }
       }
     },
@@ -158,7 +192,9 @@
       {
         "command": "extension.pasteImage",
         "title": "Paste Image",
-        "category": "Paste Image"
+        "title.zh": "粘贴图片",
+        "category": "Paste Image",
+        "category.zh": "粘贴图片"
       }
     ],
     "keybindings": [
