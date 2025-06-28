@@ -8,7 +8,14 @@
       "Bash(npm run lint)",
       "Bash(npm run lint:*)",
       "Bash(npm run format:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npx @vscode/vsce package:*)",
+      "Bash(npm install:*)",
+      "Bash(vsce package:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }

@@ -150,14 +150,14 @@
     },
     "commands": [
       {
-        "command": "pasteImage.paste",
+        "command": "extension.pasteImage",
         "title": "Paste Image",
         "category": "Paste Image"
       }
     ],
     "keybindings": [
       {
-        "command": "pasteImage.paste",
+        "command": "extension.pasteImage",
         "key": "ctrl+alt+v",
         "mac": "cmd+alt+v",
         "when": "editorTextFocus"

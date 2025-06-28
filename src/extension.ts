@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext): void {
     const imageProcessor = new ImageProcessor(logger, clipboardManager);
 
     // Register the paste command
-    const pasteCommand = vscode.commands.registerCommand('pasteImage.paste', async () => {
+    const pasteCommand = vscode.commands.registerCommand('extension.pasteImage', async () => {
       try {
         logger.debug('Paste image command triggered');
 
