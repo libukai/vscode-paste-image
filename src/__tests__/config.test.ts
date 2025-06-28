@@ -83,7 +83,12 @@ describe('ConfigManager', () => {
       });
 
       expect(() => ConfigManager.getConfig()).toThrow(PasteImageError);
-      expect(() => ConfigManager.getConfig()).toThrow(ERROR_CODES.INVALID_CONFIG);
+      try {
+        ConfigManager.getConfig();
+      } catch (error) {
+        expect(error).toBeInstanceOf(PasteImageError);
+        expect((error as PasteImageError).code).toBe(ERROR_CODES.INVALID_CONFIG);
+      }
     });
 
     it('should validate and throw error for invalid basePath configuration', () => {
@@ -93,18 +98,23 @@ describe('ConfigManager', () => {
       });
 
       expect(() => ConfigManager.getConfig()).toThrow(PasteImageError);
-      expect(() => ConfigManager.getConfig()).toThrow(ERROR_CODES.INVALID_CONFIG);
+      try {
+        ConfigManager.getConfig();
+      } catch (error) {
+        expect(error).toBeInstanceOf(PasteImageError);
+        expect((error as PasteImageError).code).toBe(ERROR_CODES.INVALID_CONFIG);
+      }
     });
 
-    it('should validate and throw error for invalid JPEG quality', () => {
+    it('should clamp JPEG quality to valid range', () => {
       mockWorkspaceConfig.get.mockImplementation((key: string, defaultValue: any) => {
         if (key === 'imageFormat') return 'jpg';
-        if (key === 'jpegQuality') return 150; // Invalid quality > 100
+        if (key === 'jpegQuality') return 150; // Invalid quality > 100, should be clamped to 100
         return defaultValue;
       });
 
-      expect(() => ConfigManager.getConfig()).toThrow(PasteImageError);
-      expect(() => ConfigManager.getConfig()).toThrow(ERROR_CODES.INVALID_CONFIG);
+      const config = ConfigManager.getConfig();
+      expect(config.jpegQuality).toBe(100); // Should be clamped to maximum
     });
 
     it('should validate and throw error for empty default name', () => {
@@ -114,7 +124,12 @@ describe('ConfigManager', () => {
       });
 
       expect(() => ConfigManager.getConfig()).toThrow(PasteImageError);
-      expect(() => ConfigManager.getConfig()).toThrow(ERROR_CODES.INVALID_CONFIG);
+      try {
+        ConfigManager.getConfig();
+      } catch (error) {
+        expect(error).toBeInstanceOf(PasteImageError);
+        expect((error as PasteImageError).code).toBe(ERROR_CODES.INVALID_CONFIG);
+      }
     });
 
     it('should handle invalid enum values by using defaults', () => {

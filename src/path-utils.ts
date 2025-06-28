@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as os from 'os';
 import * as vscode from 'vscode';
 import { format } from 'date-fns';
 import { PasteImageConfig, VariableContext, ImageSyntax, PathEncoding } from './types';
@@ -113,7 +114,23 @@ export class PathUtils {
       processor(context.imageSyntaxSuffix)
     );
 
+    // Handle home directory expansion (~)
+    result = this.expandHomeDirectory(result);
+
     return result;
+  }
+
+  /**
+   * Expand home directory (~) in paths
+   */
+  public static expandHomeDirectory(filePath: string): string {
+    if (filePath.startsWith('~/')) {
+      return path.join(os.homedir(), filePath.slice(2));
+    }
+    if (filePath === '~') {
+      return os.homedir();
+    }
+    return filePath;
   }
 
   /**
@@ -144,9 +161,43 @@ export class PathUtils {
    * Validate if a string is a valid filename
    */
   public static isValidFileName(fileName: string): boolean {
+    // Check for empty or whitespace-only names
+    if (fileName.trim().length === 0) {
+      return false;
+    }
+
+    // Check for names ending with dot or space (invalid on Windows) - use original string
+    if (fileName.endsWith('.') || fileName.endsWith(' ')) {
+      return false;
+    }
+
+    // Now work with trimmed version for other checks
+    const trimmed = fileName.trim();
+
     // Check for invalid characters in Windows/Unix
     const invalidChars = /[\\/:*?"<>|]/;
-    return !invalidChars.test(fileName) && fileName.trim().length > 0;
+    if (invalidChars.test(trimmed)) {
+      return false;
+    }
+
+    // Check for Windows reserved names (case-insensitive)
+    const reservedNames = /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/i;
+    const nameWithoutExt = trimmed.split('.')[0] || trimmed;
+    if (reservedNames.test(nameWithoutExt)) {
+      return false;
+    }
+
+    // Check for names starting with dot (hidden files, might be problematic)
+    if (trimmed.startsWith('.')) {
+      return false;
+    }
+
+    // Check for excessively long filenames (255 is common limit)
+    if (trimmed.length > 255) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
