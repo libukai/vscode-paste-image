@@ -1,11 +1,20 @@
 import * as vscode from 'vscode';
 import { ConfigManager } from '../config';
 import { PasteImageError, ERROR_CODES } from '../types';
+import { Logger } from '../logger';
 
 // Mock vscode workspace configuration
 const mockWorkspaceConfig = {
   get: jest.fn(),
 };
+
+// Mock logger
+const mockLogger = {
+  error: jest.fn(),
+  info: jest.fn(),
+  debug: jest.fn(),
+  warn: jest.fn(),
+} as unknown as Logger;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -22,7 +31,7 @@ describe('ConfigManager', () => {
       expect(config.path).toBe('${currentFileDir}');
       expect(config.basePath).toBe('${currentFileDir}');
       expect(config.forceUnixStyleSeparator).toBe(true);
-      expect(config.defaultName).toBe('YYYY-MM-DD-HH-mm-ss');
+      expect(config.defaultName).toBe('yyyy-MM-dd-HH-mm-ss');
       expect(config.encodePath).toBe('urlEncodeSpace');
       expect(config.imageFormat).toBe('png');
       expect(config.jpegQuality).toBe(85);
@@ -36,7 +45,7 @@ describe('ConfigManager', () => {
           forceUnixStyleSeparator: false,
           prefix: './images/',
           suffix: '?v=1',
-          defaultName: 'image-YYYY-MM-DD',
+          defaultName: 'image-yyyy-MM-dd',
           namePrefix: 'img_',
           nameSuffix: '_final',
           encodePath: 'urlEncode',
@@ -56,7 +65,7 @@ describe('ConfigManager', () => {
       expect(config.forceUnixStyleSeparator).toBe(false);
       expect(config.prefix).toBe('./images/');
       expect(config.suffix).toBe('?v=1');
-      expect(config.defaultName).toBe('image-YYYY-MM-DD');
+      expect(config.defaultName).toBe('image-yyyy-MM-dd');
       expect(config.namePrefix).toBe('img_');
       expect(config.nameSuffix).toBe('_final');
       expect(config.encodePath).toBe('urlEncode');
@@ -159,7 +168,7 @@ describe('ConfigManager', () => {
       const mockDisposable = { dispose: jest.fn() };
       (vscode.workspace.onDidChangeConfiguration as jest.Mock).mockReturnValue(mockDisposable);
 
-      const disposable = ConfigManager.onConfigurationChanged(callback);
+      const disposable = ConfigManager.onConfigurationChanged(callback, mockLogger);
 
       expect(vscode.workspace.onDidChangeConfiguration).toHaveBeenCalled();
       expect(disposable).toBe(mockDisposable);
@@ -174,7 +183,7 @@ describe('ConfigManager', () => {
         return { dispose: jest.fn() };
       });
 
-      ConfigManager.onConfigurationChanged(callback);
+      ConfigManager.onConfigurationChanged(callback, mockLogger);
 
       // Mock configuration values for callback
       mockWorkspaceConfig.get.mockImplementation((_key: string, defaultValue: any) => defaultValue);
@@ -199,7 +208,7 @@ describe('ConfigManager', () => {
         return { dispose: jest.fn() };
       });
 
-      ConfigManager.onConfigurationChanged(callback);
+      ConfigManager.onConfigurationChanged(callback, mockLogger);
 
       // Simulate configuration change for different section
       const mockEvent = {

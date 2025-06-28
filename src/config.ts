@@ -21,7 +21,7 @@ export class ConfigManager {
       forceUnixStyleSeparator: this.getBooleanConfig(config, 'forceUnixStyleSeparator', true),
       prefix: this.getStringConfig(config, 'prefix', ''),
       suffix: this.getStringConfig(config, 'suffix', ''),
-      defaultName: this.getStringConfig(config, 'defaultName', 'YYYY-MM-DD-HH-mm-ss'),
+      defaultName: this.getStringConfig(config, 'defaultName', 'yyyy-MM-dd-HH-mm-ss'),
       namePrefix: this.getStringConfig(config, 'namePrefix', ''),
       nameSuffix: this.getStringConfig(config, 'nameSuffix', ''),
       encodePath: this.getEnumConfig(config, 'encodePath', 'urlEncodeSpace', [

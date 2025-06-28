@@ -71,9 +71,9 @@
         },
         "pasteImage.defaultName": {
           "type": "string",
-          "default": "YYYY-MM-DD-HH-mm-ss",
+          "default": "yyyy-MM-dd-HH-mm-ss",
           "description": "Default image file name pattern using date-fns format tokens",
-          "markdownDescription": "Default image file name pattern. Uses [date-fns format tokens](https://date-fns.org/docs/format):\n- `YYYY`: 4-digit year\n- `MM`: 2-digit month\n- `DD`: 2-digit day\n- `HH`: 24-hour format hour\n- `mm`: minutes\n- `ss`: seconds"
+          "markdownDescription": "Default image file name pattern. Uses [date-fns format tokens](https://date-fns.org/docs/format):\n- `yyyy`: 4-digit year\n- `MM`: 2-digit month\n- `dd`: 2-digit day\n- `HH`: 24-hour format hour\n- `mm`: minutes\n- `ss`: seconds"
         },
         "pasteImage.namePrefix": {
           "type": "string",
