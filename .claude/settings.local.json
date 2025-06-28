@@ -15,7 +15,10 @@
       "Bash(npx @vscode/vsce package:*)",
       "Bash(npm install:*)",
       "Bash(vsce package:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(code --version)",
+      "Bash(npm test:*)",
+      "Bash(code:*)"
     ],
     "deny": []
   }

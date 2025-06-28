@@ -121,6 +121,52 @@ describe('PathUtils', () => {
     });
   });
 
+  describe('generateInsertPattern', () => {
+    const config = {
+      basePath: '${currentFileDir}',
+      forceUnixStyleSeparator: true,
+      prefix: '',
+      suffix: '',
+      encodePath: 'urlEncodeSpace' as const,
+      path: '',
+      defaultName: '',
+      namePrefix: '',
+      nameSuffix: '',
+      insertPattern: '${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix}',
+      showFilePathConfirmInputBox: false,
+      filePathConfirmInputBoxMode: 'fullPath' as const,
+      imageFormat: 'png' as const,
+      jpegQuality: 85,
+    };
+
+    it('should generate default Markdown pattern', () => {
+      const processedPath = 'images/test.png';
+      const result = PathUtils.generateInsertPattern(processedPath, config, mockContext);
+      expect(result).toBe('![](images/test.png)');
+    });
+
+    it('should use custom insert pattern', () => {
+      const customConfig = {
+        ...config,
+        insertPattern: '<img src="${imageFilePath}" alt="${imageFileNameWithoutExt}" />',
+      };
+      const processedPath = 'images/test.png';
+      const result = PathUtils.generateInsertPattern(processedPath, customConfig, mockContext);
+      expect(result).toBe('<img src="images/test.png" alt="test" />');
+    });
+
+    it('should replace all available variables in pattern', () => {
+      const customConfig = {
+        ...config,
+        insertPattern:
+          '${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix} <!-- ${imageFileName} -->',
+      };
+      const processedPath = 'images/test.png';
+      const result = PathUtils.generateInsertPattern(processedPath, customConfig, mockContext);
+      expect(result).toBe('![](images/test.png) <!-- test.png -->');
+    });
+  });
+
   describe('normalizePath', () => {
     it('should force Unix-style separators when configured', () => {
       const windowsPath = 'images\\subfolder\\test.png';
