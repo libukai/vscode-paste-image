@@ -18,7 +18,13 @@
       "Bash(node:*)",
       "Bash(code --version)",
       "Bash(npm test:*)",
-      "Bash(code:*)"
+      "Bash(code:*)",
+      "Bash(npm config:*)",
+      "Bash(npm:*)",
+      "Bash(npx vsce:*)",
+      "Bash(vsce:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }
