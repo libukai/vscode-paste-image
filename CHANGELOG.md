@@ -1,12 +1,16 @@
 # Change Log
 
-## 2.0.0 (December 28, 2024)
+## 1.0.0 (December 28, 2024)
 
-### 🔄 Complete Rewrite & Modernization
+### 🔄 Complete Rewrite & Modernization with WeChat Integration
 
-This is a complete rewrite of the extension with modern TypeScript and VSCode APIs.
+This is a complete rewrite of the extension with modern TypeScript, VSCode APIs, and WeChat Material Library integration.
 
 #### ✨ New Features
+- **WeChat Material Library Integration**: Upload images directly to WeChat with automatic HTTPS URL generation
+- **Dual Upload Modes**: Choose between local save (`Ctrl+Alt+V`) and WeChat upload (`Ctrl+Alt+W`)
+- **Progress Notifications**: Real-time upload progress and status updates
+- **Proxy Support**: Configure custom API endpoints for WeChat integration
 - **Multi-format Support**: PNG, JPEG, WebP image formats
 - **Enhanced Image Quality**: Configurable JPEG quality settings
 - **Better Language Support**: Added reStructuredText and Org-mode support
@@ -23,7 +27,13 @@ This is a complete rewrite of the extension with modern TypeScript and VSCode AP
 - **Code Quality**: ESLint + Prettier integration
 
 #### 🔧 Configuration Changes
-- **New Settings**:
+- **WeChat Integration Settings**:
+  - `pasteImage.wechat.enabled`: Enable/disable WeChat integration
+  - `pasteImage.wechat.appId`: WeChat App ID
+  - `pasteImage.wechat.appSecret`: WeChat App Secret
+  - `pasteImage.wechat.baseUrl`: API base URL (supports proxy)
+  - `pasteImage.wechat.useStableToken`: Use stable token API (recommended)
+- **Enhanced Settings**:
   - `pasteImage.imageFormat`: Choose PNG, JPEG, or WebP
   - `pasteImage.jpegQuality`: Configure JPEG compression quality
 - **Updated Defaults**:
@@ -39,9 +49,14 @@ This is a complete rewrite of the extension with modern TypeScript and VSCode AP
 - **Configuration Migration Required**: Users with custom `defaultName` patterns need to update format tokens
 
 #### 🛠️ Dependencies
-- **Added**: date-fns, clipboardy, fs-extra@11.x
+- **Added**: date-fns, clipboardy, fs-extra@11.x, form-data
 - **Removed**: moment, copy-paste, legacy type definitions
 - **Updated**: All development dependencies to latest versions
+
+#### 🌐 Localization
+- **Chinese Interface**: Full Chinese localization for all settings and messages
+- **Bilingual Documentation**: Both English and Chinese README files
+- **WeChat Integration**: Native Chinese support for WeChat-related features
 
 #### 🏆 Improvements
 - **Performance**: Faster startup and execution

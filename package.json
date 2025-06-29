@@ -4,7 +4,7 @@
   "displayName.zh": "现代图片粘贴",
   "description": "Modern VSCode extension for pasting images from clipboard with TypeScript 5.x and latest VSCode APIs",
   "description.zh": "现代化的VSCode插件，支持从剪贴板粘贴图片，使用TypeScript 5.x和最新的VSCode API",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "publisher": "Libukai",
   "author": {
     "name": "Libukai",

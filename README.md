@@ -1,143 +1,101 @@
 # Paste Image Modern
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Libukai/vscode-paste-image-modern)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Libukai/vscode-paste-image-modern)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-blue.svg)](https://www.typescriptlang.org/)
 [![VSCode](https://img.shields.io/badge/VSCode-1.75+-green.svg)](https://code.visualstudio.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.txt)
 
-A modern, fully rewritten VSCode extension for pasting images from clipboard directly into your documents. Built with TypeScript 5.x, latest VSCode APIs, and modern development practices.
+*[中文版 README](README_zh.md)*
+
+A modern, fully rewritten VSCode extension for pasting images from clipboard directly into your documents with **WeChat Material Library integration**. Built with TypeScript 5.x, latest VSCode APIs, and modern development practices.
 
 ![demo](res/vscode-paste-image.gif)
 
-## ✨ Features
+## ✨ Key Features
 
-- 🖼️ **Multi-format Support**: PNG, JPEG, WebP image formats
-- 📝 **Multiple Languages**: Markdown, AsciiDoc, reStructuredText, Org-mode
-- ⌨️ **Easy to Use**: Simple `Ctrl+Alt+V` (or `Cmd+Alt+V` on Mac) shortcut
-- 🎯 **Smart Naming**: Automatic timestamp-based naming with customizable patterns
-- 📁 **Flexible Paths**: Configurable save locations with variable substitution
-- 🔧 **Highly Configurable**: Extensive customization options
-- 🚀 **Modern Architecture**: Built with async/await, proper error handling, and TypeScript
-- 🧪 **Well Tested**: Comprehensive unit tests with Jest
-- 🔍 **Type Safe**: Full TypeScript type coverage
+### 🖼️ **Dual Upload Options**
+- **Local Save**: Traditional clipboard to local file saving
+- **WeChat Upload**: Direct upload to WeChat Material Library with automatic HTTPS URL generation
+
+### 📝 **Multi-Language Support**
+- Markdown, AsciiDoc, reStructuredText, Org-mode
+- Automatic syntax detection and formatting
+
+### ⌨️ **Convenient Shortcuts**
+- `Ctrl+Alt+V` (Windows/Linux) / `Cmd+Alt+V` (Mac) - Paste to local file
+- `Ctrl+Alt+W` (Windows/Linux) / `Cmd+Alt+W` (Mac) - Upload to WeChat
+
+### 🔧 **Advanced Configuration**
+- Multiple image formats: PNG, JPEG, WebP
+- Customizable naming patterns with date-fns
+- Flexible path configuration with variable substitution
+- WeChat API integration with proxy support
+
+### 🚀 **Modern Architecture**
+- Built with TypeScript 5.x and async/await
+- Comprehensive error handling and user feedback
+- Full test coverage with Jest
+- Type-safe configuration management
 
 ## 🚀 Quick Start
 
-1. **Install** the extension
-2. **Copy** any image to your clipboard (screenshot, image file, etc.)
-3. **Open** a Markdown or other supported file in VSCode
-4. **Press** `Ctrl+Alt+V` (Windows/Linux) or `Cmd+Alt+V` (Mac)
-5. **Done!** The image is saved and a reference is inserted
-
-## 📖 Usage
-
 ### Basic Usage
-1. Capture or copy an image to clipboard
-2. Use one of these methods:
-   - **Keyboard**: `Ctrl+Alt+V` / `Cmd+Alt+V`
-   - **Command Palette**: `Ctrl+Shift+P` → "Paste Image"
-3. Image is automatically saved and referenced in your document
+1. **Install** the extension from VSCode Marketplace
+2. **Copy** any image to your clipboard
+3. **Open** a Markdown or supported file
+4. **Press** `Ctrl+Alt+V` for local save or `Ctrl+Alt+W` for WeChat upload
+5. **Done!** Image is saved/uploaded and reference is inserted
 
-### Advanced Features
-- **Custom filename**: Select text before pasting to use as filename
-- **Confirmation dialog**: Enable `showFilePathConfirmInputBox` to modify paths
-- **Variable substitution**: Use `${currentFileDir}`, `${workspaceRoot}`, etc.
-- **Multiple formats**: Choose PNG, JPEG, or WebP output format
+### WeChat Integration Setup
+1. Get your WeChat App credentials (AppID and AppSecret)
+2. Configure the extension:
+   ```json
+   {
+     "pasteImage.wechat.enabled": true,
+     "pasteImage.wechat.appId": "your_app_id",
+     "pasteImage.wechat.appSecret": "your_app_secret",
+     "pasteImage.wechat.baseUrl": "https://api.weixin.qq.com"
+   }
+   ```
+3. Use `Ctrl+Alt+W` to upload images directly to WeChat Material Library
 
 ## ⚙️ Configuration
 
 ### Core Settings
 
-#### `pasteImage.path`
-**Default**: `"${currentFileDir}"`
+#### Local File Settings
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `pasteImage.path` | `"${currentFileDir}"` | Directory to save images |
+| `pasteImage.defaultName` | `"yyyy-MM-dd-HH-mm-ss"` | Filename pattern using date-fns |
+| `pasteImage.imageFormat` | `"png"` | Output format: png, jpg, webp |
 
-Directory where images will be saved. Supports variables:
+#### WeChat Integration Settings
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `pasteImage.wechat.enabled` | `false` | Enable WeChat integration |
+| `pasteImage.wechat.appId` | `""` | WeChat App ID |
+| `pasteImage.wechat.appSecret` | `""` | WeChat App Secret |
+| `pasteImage.wechat.baseUrl` | `"https://api.weixin.qq.com"` | API base URL (supports proxy) |
+| `pasteImage.wechat.useStableToken` | `true` | Use stable token API (recommended) |
+
+#### Advanced Settings
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `pasteImage.insertPattern` | `"${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix}"` | Custom insertion pattern |
+| `pasteImage.showFilePathConfirmInputBox` | `false` | Show confirmation dialog |
+| `pasteImage.encodePath` | `"urlEncodeSpace"` | Path encoding method |
+
+### Variable Substitution
+
+Available variables for paths and patterns:
 - `${currentFileDir}` - Current file's directory
 - `${workspaceRoot}` - Workspace root directory
-
-```json
-{
-  "pasteImage.path": "${workspaceRoot}/assets/images"
-}
-```
-
-#### `pasteImage.defaultName`
-**Default**: `"yyyy-MM-dd-HH-mm-ss"`
-
-Default filename pattern using [date-fns format tokens](https://date-fns.org/docs/format):
-- `yyyy` - 4-digit year
-- `MM` - 2-digit month
-- `dd` - 2-digit day
-- `HH` - 24-hour format hour
-- `mm` - minutes
-- `ss` - seconds
-
-```json
-{
-  "pasteImage.defaultName": "screenshot-yyyy-MM-dd"
-}
-```
-
-#### `pasteImage.imageFormat`
-**Default**: `"png"`
-
-Output image format. Options: `png`, `jpg`, `webp`
-
-```json
-{
-  "pasteImage.imageFormat": "webp"
-}
-```
-
-### Path & URL Configuration
-
-#### `pasteImage.basePath`
-**Default**: `"${currentFileDir}"`
-
-Base path for calculating relative URLs in documents.
-
-#### `pasteImage.prefix` / `pasteImage.suffix`
-**Default**: `""` / `""`
-
-Strings to prepend/append to the image path in documents.
-
-```json
-{
-  "pasteImage.prefix": "./",
-  "pasteImage.suffix": "?v=1"
-}
-```
-
-#### `pasteImage.encodePath`
-**Default**: `"urlEncodeSpace"`
-
-How to encode image paths:
-- `none` - No encoding
-- `urlEncode` - Full URL encoding  
-- `urlEncodeSpace` - Encode spaces only
-
-### Advanced Settings
-
-#### `pasteImage.insertPattern`
-**Default**: `"${imageSyntaxPrefix}${imageFilePath}${imageSyntaxSuffix}"`
-
-Customize how image references are inserted. Available variables:
-- `${imageSyntaxPrefix}` - Language-specific prefix (`![](` for Markdown)
-- `${imageSyntaxSuffix}` - Language-specific suffix (`)` for Markdown)
 - `${imageFilePath}` - Processed image path
 - `${imageFileName}` - Image filename with extension
 - `${imageFileNameWithoutExt}` - Image filename without extension
-
-```json
-{
-  "pasteImage.insertPattern": "![${imageFileNameWithoutExt}](${imageFilePath})"
-}
-```
-
-#### `pasteImage.showFilePathConfirmInputBox`
-**Default**: `false`
-
-Show input dialog to confirm/modify file path before saving.
+- `${imageSyntaxPrefix}` - Language-specific prefix (e.g., `![](` for Markdown)
+- `${imageSyntaxSuffix}` - Language-specific suffix (e.g., `)` for Markdown)
 
 ## 🔧 Configuration Examples
 
@@ -148,6 +106,16 @@ Show input dialog to confirm/modify file path before saving.
   "pasteImage.basePath": "${workspaceRoot}",
   "pasteImage.prefix": "/assets/images/",
   "pasteImage.forceUnixStyleSeparator": true
+}
+```
+
+### WeChat Content Creation
+```json
+{
+  "pasteImage.wechat.enabled": true,
+  "pasteImage.wechat.appId": "wx1234567890abcdef",
+  "pasteImage.wechat.appSecret": "your_secret_here",
+  "pasteImage.wechat.baseUrl": "https://your-proxy.com"
 }
 ```
 
@@ -183,69 +151,83 @@ Auto-detects document type and inserts appropriate syntax:
 - **Org-mode**: `[[image.png]]`
 - **Other files**: Raw file path
 
-## 🔄 Migration from v1.x
+## 🆕 What's New in v1.0
 
-This is a complete rewrite with breaking changes:
+### 🎯 Major Features
+- **WeChat Material Library Integration**: Upload images directly to WeChat with automatic HTTPS URL generation
+- **Dual Upload Modes**: Choose between local save and WeChat upload
+- **Progress Notifications**: Real-time upload progress and status updates
+- **Proxy Support**: Configure custom API endpoints for WeChat integration
 
-### Updated Dependencies
-- ✅ TypeScript 5.2+ (was 1.8.5)
-- ✅ VSCode API 1.75+ (was 1.0.0)
-- ✅ Modern date-fns (replaced moment.js)
-- ✅ Modern clipboard handling
+### 🔧 Technical Improvements
+- **TypeScript 5.x**: Complete rewrite with modern TypeScript
+- **Enhanced Error Handling**: User-friendly error messages and recovery
+- **Improved Performance**: Faster startup and execution
+- **Better Cross-Platform Support**: Enhanced clipboard handling on all platforms
 
-### Configuration Changes
-- 📝 Date format: `YYYY-MM-DD` → `yyyy-MM-dd` (date-fns format)
-- 📝 Variable: `${projectRoot}` → `${workspaceRoot}`
-- ➕ New: `imageFormat`, `jpegQuality` options
-- ➕ New: WebP format support
-
-### Migration Steps
-1. Update date patterns in `pasteImage.defaultName`
-2. Replace `${projectRoot}` with `${workspaceRoot}`
-3. Consider new image format options
+### 🌐 Localization
+- **Chinese Interface**: Full Chinese localization for all settings and messages
+- **Bilingual Documentation**: Both English and Chinese documentation
 
 ## 🛠️ Development
 
 Built with modern tools and practices:
 
-- **TypeScript 5.2+** - Full type safety
-- **ESLint + Prettier** - Code quality
-- **Jest** - Unit testing with 80%+ coverage
-- **date-fns** - Modern date formatting
-- **Async/await** - Modern async patterns
-- **Modular architecture** - Clean separation of concerns
+- **TypeScript 5.2+** - Full type safety and modern language features
+- **ESLint + Prettier** - Code quality and consistent formatting
+- **Jest** - Comprehensive unit testing with 80%+ coverage
+- **date-fns** - Modern date formatting library
+- **Async/await** - Modern asynchronous programming patterns
+- **Modular Architecture** - Clean separation of concerns
 
-## 📄 License
+## 🔒 Security & Privacy
 
-MIT License - see [LICENSE.txt](LICENSE.txt) for details.
-
-## 🏗️ Project Status
-
-This is a complete modernization of the original vscode-paste-image extension. Key improvements:
-
-- **Performance**: Faster startup and execution
-- **Reliability**: Better error handling and edge case coverage  
-- **Maintainability**: Modern codebase with comprehensive tests
-- **Features**: Additional image formats and configuration options
-- **Compatibility**: Latest VSCode APIs and TypeScript features
-
-## 👤 Author
-
-**Libukai** - Complete rewrite and modernization
-
-*Based on the original vscode-paste-image by mushan*
+- **Secure Token Management**: Automatic access token caching and refresh
+- **Configuration Validation**: Comprehensive input validation and error handling
+- **No Data Collection**: All operations are performed locally or with your configured endpoints
+- **Proxy Support**: Use your own proxy servers for enhanced security
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit issues and pull requests.
 
-## 📊 What's New in v2.0
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- 🔄 **Complete TypeScript rewrite** with modern patterns
-- 🖼️ **Multiple image formats** (PNG, JPEG, WebP)
-- 🏗️ **Modular architecture** with proper separation of concerns
-- 🧪 **Comprehensive testing** with Jest
-- 📝 **Better documentation** with examples
-- ⚡ **Improved performance** and error handling
-- 🔧 **Enhanced configuration** options
-- 🌐 **Better cross-platform support**
+## 📄 License
+
+MIT License - see [LICENSE.txt](LICENSE.txt) for details.
+
+## 👤 Author
+
+**Libukai** - Complete rewrite and modernization with WeChat integration
+
+*Based on the original vscode-paste-image concept*
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/Libukai/vscode-paste-image-modern)
+- [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Libukai.vscode-paste-image-modern)
+- [Issue Tracker](https://github.com/Libukai/vscode-paste-image-modern/issues)
+
+## 📊 Comparison with Original
+
+| Feature | Original | Paste Image Modern |
+|---------|----------|-------------------|
+| TypeScript Version | 1.8.5 (2016) | 5.2+ (2024) |
+| VSCode API | 1.0.0 | 1.75+ |
+| Date Library | moment.js | date-fns |
+| Architecture | Callback-based | Async/await |
+| WeChat Integration | ❌ | ✅ |
+| Progress Feedback | ❌ | ✅ |
+| Test Coverage | ❌ | 80%+ |
+| Chinese Localization | ❌ | ✅ |
+| Proxy Support | ❌ | ✅ |
+| Modern Error Handling | ❌ | ✅ |
+
+---
+
+**Paste Image Modern** - Making image insertion effortless with modern technology and WeChat integration! 🚀
