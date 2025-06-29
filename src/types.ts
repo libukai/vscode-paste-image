@@ -16,6 +16,7 @@ export interface PasteImageConfig {
   readonly filePathConfirmInputBoxMode: 'fullPath' | 'onlyName';
   readonly imageFormat: 'png' | 'jpg' | 'webp';
   readonly jpegQuality: number;
+  readonly wechat: WeChatConfig;
 }
 
 /**
@@ -97,6 +98,50 @@ export const ERROR_CODES = {
   SAVE_FAILED: 'SAVE_FAILED',
   INVALID_CONFIG: 'INVALID_CONFIG',
   CLIPBOARD_ACCESS_FAILED: 'CLIPBOARD_ACCESS_FAILED',
+  WECHAT_AUTH_FAILED: 'WECHAT_AUTH_FAILED',
+  WECHAT_UPLOAD_FAILED: 'WECHAT_UPLOAD_FAILED',
+  WECHAT_CONFIG_INVALID: 'WECHAT_CONFIG_INVALID',
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
+
+/**
+ * WeChat API configuration
+ */
+export interface WeChatConfig {
+  readonly enabled: boolean;
+  readonly appId: string;
+  readonly appSecret: string;
+  readonly baseUrl: string;
+  readonly useStableToken: boolean;
+}
+
+/**
+ * WeChat access token with expiration info
+ */
+export interface WeChatAccessToken {
+  readonly access_token: string;
+  readonly expires_in: number;
+  readonly timestamp: number;
+}
+
+/**
+ * WeChat material upload result
+ */
+export interface WeChatUploadResult {
+  readonly success: boolean;
+  readonly media_id?: string;
+  readonly url?: string;
+  readonly error?: string;
+  readonly errcode?: number;
+  readonly errmsg?: string;
+}
+
+/**
+ * Generic WeChat API response structure
+ */
+export interface WeChatApiResponse {
+  readonly errcode?: number;
+  readonly errmsg?: string;
+  readonly [key: string]: any;
+}

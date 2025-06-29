@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Logger, LogLevel } from './logger';
 import { ConfigManager } from './config';
 import { ImageProcessor } from './image-processor';
+import { WeChatImageProcessor } from './wechat-image-processor';
 import { PasteImageError } from './types';
 import { ClipboardManager } from './clipboard';
 
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext): void {
     // Create dependencies
     const clipboardManager = new ClipboardManager(logger);
     const imageProcessor = new ImageProcessor(logger, clipboardManager);
+    const wechatImageProcessor = new WeChatImageProcessor(logger, clipboardManager);
 
     // Register the paste command
     const pasteCommand = vscode.commands.registerCommand('extension.pasteImage', async () => {
@@ -42,6 +44,29 @@ export function activate(context: vscode.ExtensionContext): void {
       }
     });
 
+    // Register the WeChat upload command
+    const wechatUploadCommand = vscode.commands.registerCommand(
+      'extension.pasteImageToWechat',
+      async () => {
+        try {
+          logger.debug('WeChat upload command triggered');
+
+          // Get current configuration
+          const config = ConfigManager.getConfig();
+          logger.debug('Configuration loaded for WeChat upload', config.wechat);
+
+          // Execute WeChat upload operation
+          await wechatImageProcessor.pasteImageToWechat(config);
+        } catch (error) {
+          if (error instanceof PasteImageError) {
+            logger.error(`WeChat upload failed: ${error.message}`, error);
+          } else {
+            logger.error('Unexpected error during WeChat upload', error as Error);
+          }
+        }
+      }
+    );
+
     // Watch for configuration changes
     const configWatcher = ConfigManager.onConfigurationChanged(newConfig => {
       logger.info('Configuration updated');
@@ -49,7 +74,7 @@ export function activate(context: vscode.ExtensionContext): void {
     }, logger);
 
     // Register disposables
-    context.subscriptions.push(pasteCommand, configWatcher, logger);
+    context.subscriptions.push(pasteCommand, wechatUploadCommand, configWatcher, logger);
 
     logger.info('Paste Image extension activated successfully');
   } catch (error) {

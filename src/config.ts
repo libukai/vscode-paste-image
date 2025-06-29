@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { PasteImageConfig, PasteImageError, ERROR_CODES } from './types';
+import { PasteImageConfig, PasteImageError, ERROR_CODES, WeChatConfig } from './types';
 import { Logger } from './logger';
 
 /**
@@ -47,6 +47,7 @@ export class ConfigManager {
       ),
       imageFormat: this.getEnumConfig(config, 'imageFormat', 'png', ['png', 'jpg', 'webp']),
       jpegQuality: this.getNumberConfig(config, 'jpegQuality', 85, 1, 100),
+      wechat: this.getWeChatConfig(config),
     };
 
     this.validateConfig(pasteImageConfig);
@@ -159,5 +160,18 @@ export class ConfigManager {
         }
       }
     });
+  }
+
+  /**
+   * Get WeChat configuration with validation
+   */
+  private static getWeChatConfig(config: vscode.WorkspaceConfiguration): WeChatConfig {
+    return {
+      enabled: this.getBooleanConfig(config, 'wechat.enabled', false),
+      appId: this.getStringConfig(config, 'wechat.appId', ''),
+      appSecret: this.getStringConfig(config, 'wechat.appSecret', ''),
+      baseUrl: this.getStringConfig(config, 'wechat.baseUrl', 'https://api.weixin.qq.com'),
+      useStableToken: this.getBooleanConfig(config, 'wechat.useStableToken', true),
+    };
   }
 }

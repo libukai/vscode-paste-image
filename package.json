@@ -185,6 +185,36 @@
           "maximum": 100,
           "description": "JPEG 质量（1-100，仅对JPEG格式有效）",
           "description.zh": "JPEG 质量（1-100，仅对JPEG格式有效）"
+        },
+        "pasteImage.wechat.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "启用微信素材库上传功能",
+          "description.zh": "启用微信素材库上传功能"
+        },
+        "pasteImage.wechat.appId": {
+          "type": "string",
+          "default": "",
+          "description": "微信公众号或小程序的 AppID",
+          "description.zh": "微信公众号或小程序的 AppID"
+        },
+        "pasteImage.wechat.appSecret": {
+          "type": "string",
+          "default": "",
+          "description": "微信公众号或小程序的 AppSecret",
+          "description.zh": "微信公众号或小程序的 AppSecret"
+        },
+        "pasteImage.wechat.baseUrl": {
+          "type": "string",
+          "default": "https://api.weixin.qq.com",
+          "description": "微信API的基础URL（可配置代理服务器）",
+          "description.zh": "微信API的基础URL（可配置代理服务器）"
+        },
+        "pasteImage.wechat.useStableToken": {
+          "type": "boolean",
+          "default": true,
+          "description": "使用稳定版接口获取 access_token（推荐）",
+          "description.zh": "使用稳定版接口获取 access_token（推荐）"
         }
       }
     },
@@ -195,6 +225,13 @@
         "title.zh": "粘贴图片",
         "category": "Paste Image",
         "category.zh": "粘贴图片"
+      },
+      {
+        "command": "extension.pasteImageToWechat",
+        "title": "Paste Image to WeChat",
+        "title.zh": "粘贴图片到微信素材库",
+        "category": "Paste Image",
+        "category.zh": "粘贴图片"
       }
     ],
     "keybindings": [
@@ -202,6 +239,12 @@
         "command": "extension.pasteImage",
         "key": "ctrl+alt+v",
         "mac": "cmd+alt+v",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.pasteImageToWechat",
+        "key": "ctrl+alt+w",
+        "mac": "cmd+alt+w",
         "when": "editorTextFocus"
       }
     ]
@@ -223,9 +266,11 @@
   "dependencies": {
     "clipboardy": "^3.0.0",
     "date-fns": "^2.29.3",
+    "form-data": "^4.0.3",
     "fs-extra": "^11.1.1"
   },
   "devDependencies": {
+    "@types/form-data": "^2.2.1",
     "@types/fs-extra": "^11.0.1",
     "@types/jest": "^29.5.5",
     "@types/node": "18.x",
